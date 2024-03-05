@@ -6,7 +6,9 @@ import { handle } from 'frog/vercel'
 const app = new Frog({
   basePath: '/api',
   // Supply a Hub API URL to enable frame verification.
-  // hub: neynar({ apiKey: 'NEYNAR_FROG_FM' }),
+  hub: {
+    apiUrl: 'https://hub.pinata.cloud',
+  },
 })
 
 // Uncomment to use Edge Runtime
