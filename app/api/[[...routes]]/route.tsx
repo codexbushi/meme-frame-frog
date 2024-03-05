@@ -6,7 +6,7 @@ import { handle } from 'frog/vercel'
 const app = new Frog({
   basePath: '/api',
   // Supply a Hub API URL to enable frame verification.
-  // hubApiUrl: 'https://api.hub.wevm.dev',
+  hubApiUrl: 'https://api.hub.wevm.dev',
 })
 
 // Uncomment to use Edge Runtime
@@ -21,12 +21,26 @@ app.frame('/', (c) => {
 })
 
 app.frame('/picker', (c) => {
-  const { buttonValue } = c
+  const { buttonValue, frameData } = c
 
-  if (buttonValue === 'A') {
+  const { fid = undefined } = frameData || {}
+
+  if (fid && typeof fid === 'number' && fid !== null) {
+    if (buttonValue === 'A') {
+      return c.res({
+        action: '/meme/a',
+        image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/a`,
+        intents: [
+          <TextInput placeholder="Text" />,
+          <Button value="generate">Generate</Button>,
+        ],
+      })
+    }
+
     return c.res({
-      action: '/meme/a',
-      image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/a`,
+      action: '/meme/b',
+      image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/b`,
+      imageAspectRatio: '1:1',
       intents: [
         <TextInput placeholder="Text" />,
         <Button value="generate">Generate</Button>,
@@ -35,37 +49,52 @@ app.frame('/picker', (c) => {
   }
 
   return c.res({
-    action: '/meme/b',
-    image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/b`,
-    imageAspectRatio: '1:1',
-    intents: [
-      <TextInput placeholder="Text" />,
-      <Button value="generate">Generate</Button>,
-    ],
+    action: '/',
+    image: (
+      <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
+        Invalid User
+      </div>
+    ),
+    intents: [<Button>Try Again 🔄</Button>],
   })
 })
 
 app.frame('/meme/:id', (c) => {
   const id = c.req.param('id')
-  const { inputText = '' } = c
 
-  const newSearchParams = new URLSearchParams({
-    text: inputText,
-  })
+  const { frameData } = c
 
-  if (id === 'a') {
+  const { fid = undefined, inputText = '' } = frameData || {}
+
+  if (fid && typeof fid === 'number' && fid !== null) {
+    const newSearchParams = new URLSearchParams({
+      text: inputText,
+    })
+
+    if (id === 'a') {
+      return c.res({
+        action: '/',
+        image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/a?${newSearchParams}`,
+        intents: [<Button>Start Over 🔄</Button>],
+      })
+    }
+
     return c.res({
       action: '/',
-      image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/a?${newSearchParams}`,
+      image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/b?${newSearchParams}`,
+      imageAspectRatio: '1:1',
       intents: [<Button>Start Over 🔄</Button>],
     })
   }
 
   return c.res({
     action: '/',
-    image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/b?${newSearchParams}`,
-    imageAspectRatio: '1:1',
-    intents: [<Button>Start Over 🔄</Button>],
+    image: (
+      <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
+        Invalid User
+      </div>
+    ),
+    intents: [<Button>Try Again 🔄</Button>],
   })
 })
 
