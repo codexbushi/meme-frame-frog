@@ -1,13 +1,12 @@
 /** @jsxImportSource frog/jsx */
 
 import { Button, Frog, TextInput } from 'frog'
-import { neynar } from 'frog/hubs'
 import { handle } from 'frog/vercel'
 
 const app = new Frog({
   basePath: '/api',
   // Supply a Hub API URL to enable frame verification.
-  hub: neynar({ apiKey: 'NEYNAR_FROG_FM' }),
+  // hub: neynar({ apiKey: 'NEYNAR_FROG_FM' }),
 })
 
 // Uncomment to use Edge Runtime
@@ -22,26 +21,13 @@ app.frame('/', (c) => {
 })
 
 app.frame('/picker', (c) => {
-  const { buttonValue, verified } = c
+  const { buttonValue } = c
 
-  console.log('verified', verified)
-
-  if (verified) {
-    if (buttonValue === 'A') {
-      return c.res({
-        action: '/meme/a',
-        image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/a`,
-        intents: [
-          <TextInput placeholder="Text" />,
-          <Button value="generate">Generate</Button>,
-        ],
-      })
-    }
-
+  // if (verified) {
+  if (buttonValue === 'A') {
     return c.res({
-      action: '/meme/b',
-      image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/b`,
-      imageAspectRatio: '1:1',
+      action: '/meme/a',
+      image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/a`,
       intents: [
         <TextInput placeholder="Text" />,
         <Button value="generate">Generate</Button>,
@@ -50,52 +36,65 @@ app.frame('/picker', (c) => {
   }
 
   return c.res({
-    action: '/',
-    image: (
-      <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
-        Invalid User
-      </div>
-    ),
-    intents: [<Button>Try Again 🔄</Button>],
+    action: '/meme/b',
+    image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/b`,
+    imageAspectRatio: '1:1',
+    intents: [
+      <TextInput placeholder="Text" />,
+      <Button value="generate">Generate</Button>,
+    ],
   })
+  // }
+
+  // return c.res({
+  //   action: '/',
+  //   image: (
+  //     <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
+  //       Invalid User
+  //     </div>
+  //   ),
+  //   intents: [<Button>Try Again 🔄</Button>],
+  // })
 })
 
 app.frame('/meme/:id', (c) => {
   const id = c.req.param('id')
 
-  const { frameData, verified } = c
-  const { inputText = '' } = frameData || {}
+  const { inputText = '' } = c
 
-  if (verified) {
-    const newSearchParams = new URLSearchParams({
-      text: inputText,
-    })
+  // const { frameData, verified } = c
+  // const { inputText = '' } = frameData || {}
 
-    if (id === 'a') {
-      return c.res({
-        action: '/',
-        image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/a?${newSearchParams}`,
-        intents: [<Button>Start Over 🔄</Button>],
-      })
-    }
+  // if (verified) {
+  const newSearchParams = new URLSearchParams({
+    text: inputText,
+  })
 
+  if (id === 'a') {
     return c.res({
       action: '/',
-      image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/b?${newSearchParams}`,
-      imageAspectRatio: '1:1',
+      image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/a?${newSearchParams}`,
       intents: [<Button>Start Over 🔄</Button>],
     })
   }
 
   return c.res({
     action: '/',
-    image: (
-      <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
-        Invalid User
-      </div>
-    ),
-    intents: [<Button>Try Again 🔄</Button>],
+    image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/b?${newSearchParams}`,
+    imageAspectRatio: '1:1',
+    intents: [<Button>Start Over 🔄</Button>],
   })
+  // }
+
+  // return c.res({
+  //   action: '/',
+  //   image: (
+  //     <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
+  //       Invalid User
+  //     </div>
+  //   ),
+  //   intents: [<Button>Try Again 🔄</Button>],
+  // })
 })
 
 export const GET = handle(app)
