@@ -1,14 +1,13 @@
 /** @jsxImportSource frog/jsx */
 
 import { Button, Frog, TextInput } from 'frog'
+import { neynar } from 'frog/hubs'
 import { handle } from 'frog/vercel'
 
 const app = new Frog({
   basePath: '/api',
   // Supply a Hub API URL to enable frame verification.
-  hub: {
-    apiUrl: 'https://api.hub.wevm.dev',
-  },
+  hub: neynar({ apiKey: 'NEYNAR_FROG_FM' }),
 })
 
 // Uncomment to use Edge Runtime
