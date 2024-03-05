@@ -1,13 +1,12 @@
 /** @jsxImportSource frog/jsx */
 
 import { Button, Frog, TextInput } from 'frog'
-import { neynar } from 'frog/hubs'
 import { handle } from 'frog/vercel'
 
 const app = new Frog({
   basePath: '/api',
   // Supply a Hub API URL to enable frame verification.
-  hub: neynar({ apiKey: 'NEYNAR_FROG_FM' }),
+  hubApiUrl: 'https://api.hub.wevm.dev',
 })
 
 // Uncomment to use Edge Runtime
@@ -16,7 +15,7 @@ const app = new Frog({
 app.frame('/', (c) => {
   return c.res({
     action: '/picker',
-    image: 'https://meme-frames.vercel.app/site-preview.jpg',
+    image: `${process.env.NEXT_PUBLIC_SITE_URL}/site-preview.jpg`,
     intents: [<Button value="A">A</Button>, <Button value="B">B</Button>],
   })
 })
