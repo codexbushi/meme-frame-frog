@@ -1,12 +1,13 @@
 /** @jsxImportSource frog/jsx */
 
 import { Button, Frog, TextInput } from 'frog'
+import { neynar } from 'frog/hubs'
 import { handle } from 'frog/vercel'
 
 const app = new Frog({
   basePath: '/api',
   // Supply a Hub API URL to enable frame verification.
-  hubApiUrl: 'https://api.hub.wevm.dev',
+  hub: neynar({ apiKey: 'NEYNAR_FROG_FM' }),
 })
 
 // Uncomment to use Edge Runtime
@@ -22,6 +23,8 @@ app.frame('/', (c) => {
 
 app.frame('/picker', (c) => {
   const { buttonValue, verified } = c
+
+  console.log('verified', verified)
 
   if (verified) {
     if (buttonValue === 'A') {
