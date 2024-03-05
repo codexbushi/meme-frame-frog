@@ -6,7 +6,9 @@ import { handle } from 'frog/vercel'
 const app = new Frog({
   basePath: '/api',
   // Supply a Hub API URL to enable frame verification.
-  hubApiUrl: 'https://api.hub.wevm.dev',
+  hub: {
+    apiUrl: 'https://api.hub.wevm.dev',
+  },
 })
 
 // Uncomment to use Edge Runtime
@@ -21,11 +23,9 @@ app.frame('/', (c) => {
 })
 
 app.frame('/picker', (c) => {
-  const { buttonValue, frameData } = c
+  const { buttonValue, verified } = c
 
-  const { fid = undefined } = frameData || {}
-
-  if (fid && typeof fid === 'number' && fid !== null) {
+  if (verified) {
     if (buttonValue === 'A') {
       return c.res({
         action: '/meme/a',
@@ -62,11 +62,10 @@ app.frame('/picker', (c) => {
 app.frame('/meme/:id', (c) => {
   const id = c.req.param('id')
 
-  const { frameData } = c
+  const { frameData, verified } = c
+  const { inputText = '' } = frameData || {}
 
-  const { fid = undefined, inputText = '' } = frameData || {}
-
-  if (fid && typeof fid === 'number' && fid !== null) {
+  if (verified) {
     const newSearchParams = new URLSearchParams({
       text: inputText,
     })
