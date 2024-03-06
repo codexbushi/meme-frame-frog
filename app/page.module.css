@@ -41,7 +41,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(25%, auto));
+  grid-template-columns: repeat(3, minmax(25%, auto));
   max-width: 100%;
   width: var(--max-width);
 }
@@ -79,6 +79,7 @@
   align-items: center;
   position: relative;
   padding: 4rem 0;
+  text-align: center;
 }
 
 .center::before {
@@ -103,6 +104,14 @@
   position: absolute;
   filter: blur(45px);
   transform: translateZ(0);
+}
+
+.center a {
+  color: deepskyblue;
+}
+
+.title {
+  margin-top: 1rem;
 }
 
 .logo {

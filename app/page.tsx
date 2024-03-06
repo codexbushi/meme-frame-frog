@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import styles from './page.module.css'
 
 export default function Home() {
@@ -6,10 +5,6 @@ export default function Home() {
     <main className={styles.main}>
       <div className={styles.description}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>app/page.tsx</code>
-          </p>
           <p>
             Head to{' '}
             <a
@@ -21,51 +16,51 @@ export default function Home() {
             for your frame endpoint.
           </p>
         </div>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+        <div></div>
       </div>
 
       <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+        <div>
+          <h1>Meme Generator</h1>
+          <h2 className={styles.title}>
+            A Frame Experiment by{' '}
+            <a
+              className="text-indigo-400 hover:text-indigo-300"
+              href="https://warpcast.com/hunterchang.eth"
+            >
+              Hunter Chang
+            </a>
+          </h2>
+        </div>
       </div>
 
       <div className={styles.grid}>
         <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+          href="https://github.com/codexbushi/meme-frame-frog"
           className={styles.card}
           target="_blank"
           rel="noopener noreferrer"
         >
           <h2>
-            Docs <span>-&gt;</span>
+            Github <span>-&gt;</span>
           </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
+          <p>View the source code</p>
         </a>
 
         <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+          href="https://frog.fm/"
+          className={styles.card}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <h2>
+            Frog.fm <span>-&gt;</span>
+          </h2>
+          <p>Built with Frog.fm</p>
+        </a>
+
+        <a
+          href="https://youtu.be/g_pkATT8pYU?si=jY7Ilr7E_M6hrKJB"
           className={styles.card}
           target="_blank"
           rel="noopener noreferrer"
@@ -73,33 +68,7 @@ export default function Home() {
           <h2>
             Learn <span>-&gt;</span>
           </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
+          <p>Learn how to build your own Farcaster Frames</p>
         </a>
       </div>
     </main>
