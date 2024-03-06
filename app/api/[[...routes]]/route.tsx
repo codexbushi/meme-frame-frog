@@ -1,14 +1,12 @@
 /** @jsxImportSource frog/jsx */
 
 import { Button, Frog, TextInput } from 'frog'
+import { pinata } from 'frog/hubs'
 import { handle } from 'frog/vercel'
 
 const app = new Frog({
   basePath: '/api',
-  // Supply a Hub API URL to enable frame verification.
-  hub: {
-    apiUrl: 'https://hub.pinata.cloud',
-  },
+  hub: pinata(),
 })
 
 // Uncomment to use Edge Runtime
