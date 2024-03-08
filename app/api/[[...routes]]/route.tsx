@@ -62,7 +62,7 @@ app.transaction('/send-ether', (c) => {
   // Send transaction response.
   return c.send({
     // @ts-ignore
-    chainId: 'eip155:11155111',
+    chainId: 'eip155:420',
     to: '0x5B46c86bCe00647a2a35278a4108Fb563A07a515',
     value: parseEther(inputText),
   })
@@ -74,7 +74,7 @@ app.transaction('/mint', (c) => {
   return c.contract({
     abi,
     // @ts-ignore
-    chainId: 'eip155:11155111',
+    chainId: 'eip155:420',
     functionName: 'mint',
     // @ts-ignore
     args: [69420n],
