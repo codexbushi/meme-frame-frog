@@ -1,11 +1,13 @@
 /** @jsxImportSource frog/jsx */
 
 import { Button, Frog, TextInput, parseEther } from 'frog'
+import { pinata } from 'frog/hubs'
 import { handle } from 'frog/vercel'
 import { abi } from '../../contracts/abi'
 
 const app = new Frog({
   basePath: '/api',
+  hub: pinata(),
 })
 
 app.frame('/', (c) => {
