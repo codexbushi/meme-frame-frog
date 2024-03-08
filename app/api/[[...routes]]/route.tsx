@@ -1,97 +1,80 @@
 /** @jsxImportSource frog/jsx */
 
-import { Button, Frog, TextInput } from 'frog'
-import { pinata } from 'frog/hubs'
+import { Button, Frog, TextInput, parseEther } from 'frog'
 import { handle } from 'frog/vercel'
+import { abi } from '../../contracts/abi'
 
 const app = new Frog({
   basePath: '/api',
-  hub: pinata(),
 })
-
-// Uncomment to use Edge Runtime
-// export const runtime = 'edge'
 
 app.frame('/', (c) => {
   return c.res({
-    action: '/picker',
-    image: `${process.env.NEXT_PUBLIC_SITE_URL}/site-preview.jpg`,
-    intents: [<Button value="A">A</Button>, <Button value="B">B</Button>],
+    action: '/finish',
+    image: (
+      <div
+        style={{
+          color: 'white',
+          display: 'flex',
+          justifyItems: 'center',
+          alignItems: 'center',
+          width: '100%',
+          height: '100%',
+          fontSize: 60,
+        }}
+      >
+        Perform a transaction
+      </div>
+    ),
+    intents: [
+      <TextInput placeholder="Value (ETH)" />,
+      <Button.Transaction target="/send-ether">Send Ether</Button.Transaction>,
+      <Button.Transaction target="/mint">Mint</Button.Transaction>,
+    ],
   })
 })
 
-app.frame('/picker', (c) => {
-  const { buttonValue, verified } = c
-
-  if (verified) {
-    if (buttonValue === 'A') {
-      return c.res({
-        action: '/meme/a',
-        image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/a`,
-        intents: [
-          <TextInput placeholder="Text" />,
-          <Button value="generate">Generate</Button>,
-        ],
-      })
-    }
-
-    return c.res({
-      action: '/meme/b',
-      image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/b`,
-      imageAspectRatio: '1:1',
-      intents: [
-        <TextInput placeholder="Text" />,
-        <Button value="generate">Generate</Button>,
-      ],
-    })
-  }
-
+app.frame('/finish', (c) => {
+  const { transactionId } = c
   return c.res({
-    action: '/',
     image: (
-      <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
-        Invalid User
+      <div
+        style={{
+          color: 'white',
+          display: 'flex',
+          justifyItems: 'center',
+          alignItems: 'center',
+          fontSize: 60,
+        }}
+      >
+        Transaction ID: {transactionId}
       </div>
     ),
-    intents: [<Button>Try Again 🔄</Button>],
   })
 })
 
-app.frame('/meme/:id', (c) => {
-  const id = c.req.param('id')
+app.transaction('/send-ether', (c) => {
+  const { inputText = '' } = c
 
-  const { frameData, verified } = c
-  const { inputText = '' } = frameData || {}
+  console.log('inputText', inputText)
+  // Send transaction response.
+  return c.send({
+    chainId: 'eip155:84532',
+    to: '0x5B46c86bCe00647a2a35278a4108Fb563A07a515',
+    value: parseEther(inputText),
+  })
+})
 
-  if (verified) {
-    const newSearchParams = new URLSearchParams({
-      text: inputText,
-    })
-
-    if (id === 'a') {
-      return c.res({
-        action: '/',
-        image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/a?${newSearchParams}`,
-        intents: [<Button>Start Over 🔄</Button>],
-      })
-    }
-
-    return c.res({
-      action: '/',
-      image: `${process.env.NEXT_PUBLIC_SITE_URL}/meme/b?${newSearchParams}`,
-      imageAspectRatio: '1:1',
-      intents: [<Button>Start Over 🔄</Button>],
-    })
-  }
-
-  return c.res({
-    action: '/',
-    image: (
-      <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
-        Invalid User
-      </div>
-    ),
-    intents: [<Button>Try Again 🔄</Button>],
+app.transaction('/mint', (c) => {
+  const { inputText = '' } = c
+  // Contract transaction response.
+  return c.contract({
+    abi,
+    chainId: 'eip155:84532',
+    functionName: 'mint',
+    args: [69420n],
+    to: '0x5B46c86bCe00647a2a35278a4108Fb563A07a515',
+    value: parseEther(inputText),
   })
 })
 
